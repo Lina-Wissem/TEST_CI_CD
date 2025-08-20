@@ -18,7 +18,7 @@ env:
   TALEND_WORKSPACE: Dev 
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,9 +36,21 @@ jobs:
     # Step 3. Download Talend CLI
     - name: Install Talend CLI
       run: |
-        curl -sL https://update.talend.com/Studio/8/updates/runtime/latest/talend-cli.zip -o talend-cli.zip
-        unzip talend-cli.zip -d talend-cli
+        echo "Downloading Talend CLI..."
+        curl -fSL -u "${{ secrets.TALEND_USERNAME }}:${{ secrets.TALEND_API_TOKEN }}" \
+          https://update.talend.com/Studio/8/updates/runtime/latest/talend-cli.zip -o talend-cli.zip
+    
+        # Verify the file exists and is a ZIP
+        if ! file talend-cli.zip | grep -q "Zip archive data"; then
+          echo "ERROR: Downloaded file is not a valid ZIP. Exiting."
+          exit 1
+        fi
+    
+        # Unzip and set executable permission
+        unzip -q talend-cli.zip -d talend-cli
         chmod +x talend-cli/tcli.sh
+    
+        echo "Talend CLI installed successfully."
 
     # Step 4. Authenticate to Talend Cloud
     - name: Authenticate to Talend Cloud
@@ -62,6 +74,10 @@ jobs:
             --target ./build-output
         done
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
     # Step 6. Deploy/export the job artifact
     - name: Deploy all Talend Jobs
       run: |
