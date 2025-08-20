@@ -27,7 +27,7 @@ jobs:
     - name: Checkout Repo B
       uses: actions/checkout@v4
       with:
-        repository: Lina-Wissem/TEST_CI_CD/process 
+        repository: Lina-Wissem/TEST_CI_CD 
         path: repo-b                              
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,10 +39,10 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B package --file ../TEST_CI_CD/process/pom.xml
+      run: mvn -B package --file repo-b/process/pom.xml
 
     - name: Run Unit Tests
-      run: mvn -B test --file ../TEST_CI_CD/process/pom.xml
+      run: mvn -B test --file repo-b/process/pom.xml
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
