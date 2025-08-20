@@ -14,6 +14,14 @@
 	<version>@JobVersion@</version>
 	<name>@ProjectName@ @JobName@-@JobVersion@ (@TalendJobVersion@,@JobType@)</name>
 
+ <distributionManagement>
+  <repository>
+    <id>github</id>
+    <url>https://maven.pkg.github.com/Lina-Wissem/TEST_CI_CD</url>
+  </repository>
+</distributionManagement>
+
+	
 	<properties>
 		<talend.job.path>@JobPath@</talend.job.path>
 		<!-- for jobInfo.properties -->
